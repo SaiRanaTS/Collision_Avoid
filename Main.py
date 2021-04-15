@@ -8,10 +8,10 @@ from create_obstacles import create_obstacles
 from control import compute_desired_velocity
 import numpy as np
 
-SIM_TIME = 5.
+SIM_TIME = 50.
 TIMESTEP = 0.1
 NUMBER_OF_TIMESTEPS = int(SIM_TIME/TIMESTEP)
-ROBOT_RADIUS = 0.5
+ROBOT_RADIUS = 1.5
 VMAX = 2
 VMIN = 0.2
 
@@ -125,7 +125,7 @@ filename = 'test'
 obstacles = create_obstacles(SIM_TIME, NUMBER_OF_TIMESTEPS)
 
 start = np.array([0, 0, 0, 0])
-goal = np.array([5, 10, 0, 0])
+goal = np.array([5, 100, 0, 0])
 
 robot_state = start
 robot_state_history = np.empty((4, NUMBER_OF_TIMESTEPS))
