@@ -7,13 +7,14 @@ from multi_robot_plot import plot_robot_and_obstacles
 from create_obstacles import create_obstacles
 from control import compute_desired_velocity
 import numpy as np
+import math
 
-SIM_TIME = 50.
-TIMESTEP = 0.1
+SIM_TIME = 150.
+TIMESTEP = 1
 NUMBER_OF_TIMESTEPS = int(SIM_TIME/TIMESTEP)
-ROBOT_RADIUS = 1.5
-VMAX = 2
-VMIN = 0.2
+ROBOT_RADIUS = 80
+VMAX = 100
+VMIN = 10
 
 
 
@@ -69,7 +70,8 @@ def compute_velocity(robot, obstacles, v_desired):
     norm = np.linalg.norm(diffs, axis=0)
     min_index = np.where(norm == np.amin(norm))[0][0]
     cmd_vel = (v_satisfying_constraints[:, min_index])
-
+    vp = math.sqrt((cmd_vel[0])**2 + (cmd_vel[1])**2)
+    #print(vp)
     return cmd_vel
 
 
@@ -111,21 +113,25 @@ def translate_line(line, translation):
     matrix[2, :2] = -translation[:2]
     return matrix @ line
 
-
+Osx_list = []
+Osy_list = []
 def update_state(x, v):
     new_state = np.empty((4))
     new_state[:2] = x[:2] + v * TIMESTEP
     new_state[-2:] = v
+    Osx_list.append(round(x[0],2))
+    Osy_list.append(round(x[1], 2))
     return new_state
-
 
 
 
 filename = 'test'
 obstacles = create_obstacles(SIM_TIME, NUMBER_OF_TIMESTEPS)
 
+print(obstacles[0][0])
+
 start = np.array([0, 0, 0, 0])
-goal = np.array([5, 100, 0, 0])
+goal = np.array([5, 4000, 0, 0])
 
 robot_state = start
 robot_state_history = np.empty((4, NUMBER_OF_TIMESTEPS))
@@ -137,3 +143,6 @@ for i in range(NUMBER_OF_TIMESTEPS):
 
 plot_robot_and_obstacles(
     robot_state_history, obstacles, ROBOT_RADIUS, NUMBER_OF_TIMESTEPS, SIM_TIME, filename)
+
+print('The x values are : ',Osx_list)
+print('The x values are : ',Osy_list)

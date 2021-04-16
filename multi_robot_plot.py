@@ -11,18 +11,33 @@ import numpy as np
 
 
 def plot_robot_and_obstacles(robot, obstacles, robot_radius, num_steps, sim_time, filename):
-    fig = plt.figure()
-    ax = fig.add_subplot(111, autoscale_on=False, xlim=(-120, 120), ylim=(0, 120))
-    ax.set_aspect('equal')
-    ax.grid()
+    img = plt.imread("bpo.png")
+
+    fig, ax = plt.subplots()
+    fig.set_size_inches(15, 10)
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
+
+    ax.imshow(img, extent=[-4122, 6028, -400, 4675], alpha=1.96)
+    plt.xlim([-4122, 6028])
+    plt.ylim([-400, 4675])
+
+    plt.xlabel('East (m)')
+    plt.ylabel('North (m)')
+    plt.grid(alpha=0.2)
+
+
+    # fig = plt.figure()
+    # ax = fig.add_subplot(111, autoscale_on=False, xlim=(-120, 120), ylim=(0, 120))
+    # ax.set_aspect('equal')
+    # ax.grid()
     line, = ax.plot([], [], '--r')
 
-    robot_patch = Circle((robot[0, 0], robot[1, 0]),
-                         robot_radius, facecolor='green', edgecolor='black')
+
+    robot_patch = Circle((robot[0, 0], robot[1, 0]), robot_radius, facecolor='white', edgecolor='black')
     obstacle_list = []
     for obstacle in range(np.shape(obstacles)[2]):
         obstacle = Circle((0, 0), robot_radius,
-                          facecolor='aqua', edgecolor='black')
+                          alpha=0.1, facecolor='red', label='Label')
         obstacle_list.append(obstacle)
 
     def init():
@@ -63,10 +78,12 @@ def plot_robot(robot, timestep, radius=1, is_obstacle=False):
     x = center[0]
     y = center[1]
     if is_obstacle:
-        circle = plt.Circle((x, y), radius, color='aqua', ec='black')
+        circle = plt.Circle((x, y), radius, color='red', ec='black')
         plt.plot(robot[0, :timestep], robot[1, :timestep], '--r',)
     else:
         circle = plt.Circle((x, y), radius, color='green', ec='black')
         plt.plot(robot[0, :timestep], robot[1, :timestep], 'blue')
 
+
     plt.gcf().gca().add_artist(circle)
+

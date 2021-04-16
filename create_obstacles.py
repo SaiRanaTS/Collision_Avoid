@@ -1,31 +1,69 @@
 import numpy as np
+import math
 
 def create_obstacles(sim_time, num_timesteps):
     # Obstacle 1
-    v = -2
-    p0 = np.array([50, 120])
-    obst = create_robot(p0, v, np.pi/2, sim_time,
+    v = -20
+    p0 = np.array([500, 1200])
+    ang1 = 0
+    obst = create_robot(p0, v, math.radians(ang1), sim_time,
                         num_timesteps).reshape(4, num_timesteps, 1)
     obstacles = obst
     # Obstacle 2
-    v = 2
-    p0 = np.array([50, 100])
-    obst = create_robot(p0, v, 0, sim_time, num_timesteps).reshape(
+    v = -20
+    p0 = np.array([500, 1000])
+    ang2 = 0
+    obst = create_robot(p0, v, math.radians(ang2), sim_time, num_timesteps).reshape(
         4, num_timesteps, 1)
     obstacles = np.dstack((obstacles, obst))
     # Obstacle 3
-    v = 2
-    p0 = np.array([80, 150])
-    obst = create_robot(p0, v, -np.pi * 3 / 4, sim_time, num_timesteps).reshape(4,
+    v = -20
+    p0 = np.array([1200, 2500])
+    ang3 = 0
+    obst = create_robot(p0, v, math.radians(ang3), sim_time, num_timesteps).reshape(4,
                                                                                 num_timesteps, 1)
     obstacles = np.dstack((obstacles, obst))
     # Obstacle 4
-    v = 2
-    p0 = np.array([7.5, 2.5])
-    obst = create_robot(p0, v, np.pi * 3 / 4, sim_time, num_timesteps).reshape(4,
+    v = -20
+    p0 = np.array([1350, 3500])
+    ang4 = 0
+    obst = create_robot(p0, v, math.radians(ang4), sim_time, num_timesteps).reshape(4,
                                                                                num_timesteps, 1)
     obstacles = np.dstack((obstacles, obst))
 
+
+    # Obstacle 5
+    v = -20
+    p0 = np.array([1050, 3000])
+    ang5 = 0
+    obst = create_robot(p0, v, math.radians(ang4), sim_time, num_timesteps).reshape(4,
+                                                                               num_timesteps, 1)
+    obstacles = np.dstack((obstacles, obst))
+
+    # Obstacle 6
+    v = 20
+    p0 = np.array([-1050, 2700])
+    ang6 = 0
+    obst = create_robot(p0, v, math.radians(ang6), sim_time, num_timesteps).reshape(4,
+                                                                               num_timesteps, 1)
+    obstacles = np.dstack((obstacles, obst))
+
+    # Obstacle 7
+    v = 30
+    p0 = np.array([-1050, 2000])
+    ang7 = 0
+    obst = create_robot(p0, v, math.radians(ang7), sim_time, num_timesteps).reshape(4,
+                                                                                    num_timesteps, 1)
+    obstacles = np.dstack((obstacles, obst))
+
+
+    # Obstacle 8
+    v = 30
+    p0 = np.array([-1050, 2600])
+    ang8 = 0
+    obst = create_robot(p0, v, math.radians(ang8), sim_time, num_timesteps).reshape(4,
+                                                                                    num_timesteps, 1)
+    obstacles = np.dstack((obstacles, obst))
     return obstacles
 
 
