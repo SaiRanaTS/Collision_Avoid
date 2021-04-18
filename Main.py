@@ -3,26 +3,28 @@ Collision avoidance using Velocity-obstacle method
 
 """
 
-from multi_robot_plot import plot_robot_and_obstacles
-from create_obstacles import create_obstacles
+from multi_ship_plot import plot_ship_and_obstacles
+from create_obstacles import create_TS
 from control import compute_desired_velocity
 import numpy as np
 import math
 
-SIM_TIME = 150.
-TIMESTEP = 1
+SIM_TIME = 40
+TIMESTEP = 0.1
 NUMBER_OF_TIMESTEPS = int(SIM_TIME/TIMESTEP)
-ROBOT_RADIUS = 80
-VMAX = 100
-VMIN = 10
+ROBOT_RADIUS = 130
+VMAX = 190
+VMIN = 170
+
+start = np.array([0, 0, 0, 0])
+goal = np.array([5, 4000, 0, 0])
 
 
 
+def compute_velocity(ship, obstacles, v_desired):
+    pA = ship[:2]
+    vA = ship[-2:]
 
-
-def compute_velocity(robot, obstacles, v_desired):
-    pA = robot[:2]
-    vA = robot[-2:]
     # Compute the constraints
     # for each velocity obstacles
     number_of_obstacles = np.shape(obstacles)[1]
@@ -126,23 +128,32 @@ def update_state(x, v):
 
 
 filename = 'test'
-obstacles = create_obstacles(SIM_TIME, NUMBER_OF_TIMESTEPS)
+TS = create_TS(SIM_TIME, NUMBER_OF_TIMESTEPS)
+ts1_x = []
+ts1_y = []
 
-print(obstacles[0][0])
 
-start = np.array([0, 0, 0, 0])
-goal = np.array([5, 4000, 0, 0])
+
 
 robot_state = start
 robot_state_history = np.empty((4, NUMBER_OF_TIMESTEPS))
+
+done = False
 for i in range(NUMBER_OF_TIMESTEPS):
     v_desired = compute_desired_velocity(robot_state, goal, ROBOT_RADIUS, VMAX)
-    control_vel = compute_velocity(robot_state, obstacles[:, i, :], v_desired)
+    control_vel = compute_velocity(robot_state, TS[:, i, :], v_desired)
     robot_state = update_state(robot_state, control_vel)
     robot_state_history[:4, i] = robot_state
+    print(control_vel[0])
+    if control_vel[0] == 0:
+        done = True
 
-plot_robot_and_obstacles(
-    robot_state_history, obstacles, ROBOT_RADIUS, NUMBER_OF_TIMESTEPS, SIM_TIME, filename)
+
+if done == True:
+    print('Goal')
+
+plot_ship_and_obstacles(
+    robot_state_history, TS, ROBOT_RADIUS, NUMBER_OF_TIMESTEPS, SIM_TIME, filename,start[0],start[1],goal[0],goal[1])
 
 print('The x values are : ',Osx_list)
 print('The x values are : ',Osy_list)
