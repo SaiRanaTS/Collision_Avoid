@@ -13,6 +13,7 @@ def plot_ship_and_obstacles(ship, obstacles, robot_radius, num_steps, sim_time, 
     img = plt.imread("bpoA.png")
 
     fig, ax = plt.subplots()
+
     fig.set_size_inches(15, 10)
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
 
@@ -32,6 +33,7 @@ def plot_ship_and_obstacles(ship, obstacles, robot_radius, num_steps, sim_time, 
             verticalalignment='bottom', horizontalalignment='right',
             transform=ax.transAxes,
             color='Black', fontsize=15)
+
 
     # fig = plt.figure()
     # ax = fig.add_subplot(111, autoscale_on=False, xlim=(-120, 120), ylim=(0, 120))
@@ -59,13 +61,18 @@ def plot_ship_and_obstacles(ship, obstacles, robot_radius, num_steps, sim_time, 
         for j in range(len(obstacle_list)):
             obstacle_list[j].center = (obstacles[0, i, j], obstacles[1, i, j])
         line.set_data(ship[0, :i], ship[1, :i])
+
         return [robot_patch] + [line] + obstacle_list
+
+
+
 
     init()
     step = (sim_time / num_steps)
     for i in range(num_steps):
         animate(i)
         plt.pause(step)
+
 
     # Save animation
     # if not filename:
@@ -84,10 +91,12 @@ def plot_robot(robot, timestep, radius=1, is_obstacle=False):
     center = robot[:2, timestep]
     x = center[0]
     y = center[1]
+    plt.text(1000, 1000, 'Start Point', color='Black', fontsize=10)
     if is_obstacle:
         circle = plt.Circle((x, y), radius, color='red', ec='black')
         print(x)
         plt.plot(robot[0, :timestep], robot[1, :timestep], '--r',)
+
     else:
         circle = plt.Circle((x, y), radius, color='green', ec='black')
         plt.plot(robot[0, :timestep], robot[1, :timestep], 'blue')

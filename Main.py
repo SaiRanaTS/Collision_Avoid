@@ -2,9 +2,9 @@
 Collision avoidance using Velocity-obstacle method
 
 """
-
 from multi_ship_plot import plot_ship_and_obstacles
 from create_obstacles import create_TS
+from create_obstacles import input_TS
 from control import compute_desired_velocity
 import numpy as np
 import math
@@ -22,26 +22,98 @@ goal = np.array([5, 4000, 0, 0])
 
 
 def compute_velocity(ship, obstacles, v_desired):
-    pA = ship[:2]
+    pA = ship[:2] # own ship position  x and y
     vA = ship[-2:]
-
+    #print(obstacles)
     # Compute the constraints
     # for each velocity obstacles
     number_of_obstacles = np.shape(obstacles)[1]
     Amat = np.empty((number_of_obstacles * 2, 2))
     bvec = np.empty((number_of_obstacles * 2))
     for i in range(number_of_obstacles):
-        obstacle = obstacles[:, i]
-        pB = obstacle[:2]
-        vB = obstacle[2:]
-        dispBA = pA - pB
+        obstacle = obstacles[:, i] #state of obstarcle in x y v and angle in array
+        pB = obstacle[:2] # X and Y coordinates of the obstacle
+        vB = obstacle[2:] # v and angle of obstacle
+        #print(obstacle)
+        dispBA = pA - pB # displacement of obstacle to own ship
         distBA = np.linalg.norm(dispBA)
         thetaBA = np.arctan2(dispBA[1], dispBA[0])
-        if 2.2 * ROBOT_RADIUS > distBA:
-            distBA = 2.2*ROBOT_RADIUS
-        phi_obst = np.arcsin(2.2*ROBOT_RADIUS/distBA)
-        phi_left = thetaBA + phi_obst
-        phi_right = thetaBA - phi_obst
+
+
+        #COLREG Implementation
+        #print(math.degrees(thetaBA))
+
+        gotang = math.degrees(thetaBA)
+        if gotang < 0:
+            ang2own = 360 + (gotang)
+        else:
+            ang2own = gotang
+
+        covrt_ang = ang2own
+        col_ang = 360 - covrt_ang + input_TS()[2]
+
+        if col_ang > 360:
+            col_angP = col_ang - 360
+        else: col_angP = col_ang
+
+
+        if col_angP <=67.5 and col_angP>5:
+            print('A')
+            if 4.5 * ROBOT_RADIUS > distBA:
+                distBA = 4 * ROBOT_RADIUS
+            phi_obst = np.arcsin(5 * ROBOT_RADIUS / distBA)
+            # print(math.degrees(phi_obst))
+            phi_left = thetaBA + phi_obst
+            phi_right = thetaBA - phi_obst
+
+        elif col_angP <=112.5 and col_angP>67.5:
+            print('B')
+            if 4.5 * ROBOT_RADIUS > distBA:
+                distBA = 4 * ROBOT_RADIUS
+            phi_obst = np.arcsin(5 * ROBOT_RADIUS / distBA)
+            # print(math.degrees(phi_obst))
+            phi_left = thetaBA + phi_obst
+            phi_right = thetaBA - phi_obst
+
+        elif col_angP <=210.0 and col_angP>112.5:
+            print('C')
+            if 4.5 * ROBOT_RADIUS > distBA:
+                distBA = 4 * ROBOT_RADIUS
+            phi_obst = np.arcsin(3.2 * ROBOT_RADIUS / distBA)
+            # print(math.degrees(phi_obst))
+            phi_left = thetaBA + phi_obst
+            phi_right = thetaBA - phi_obst
+
+        elif col_angP <=247.5 and col_angP>210.0:
+            print('D')
+            if 4.5 * ROBOT_RADIUS > distBA:
+                distBA = 4 * ROBOT_RADIUS
+            phi_obst = np.arcsin(3.2 * ROBOT_RADIUS / distBA)
+            # print(math.degrees(phi_obst))
+            phi_left = thetaBA + phi_obst
+            phi_right = thetaBA - phi_obst
+
+        elif col_angP <=355 and col_angP>247.5:
+            print('E')
+            if 4.5 * ROBOT_RADIUS > distBA:
+                distBA = 4 * ROBOT_RADIUS
+            phi_obst = np.arcsin(3.2 * ROBOT_RADIUS / distBA)
+            # print(math.degrees(phi_obst))
+            phi_left = thetaBA + phi_obst
+            phi_right = thetaBA - phi_obst
+
+
+        else :
+            print('F')
+            if 2.2 * ROBOT_RADIUS > distBA:
+                distBA = 1.0 * ROBOT_RADIUS
+            phi_obst = np.arcsin(1.0 * ROBOT_RADIUS / distBA)
+            # print(math.degrees(phi_obst))
+            phi_left = thetaBA + phi_obst
+            phi_right = thetaBA - phi_obst
+
+
+
 
         # VO
         translation = vB
@@ -129,6 +201,7 @@ def update_state(x, v):
 
 filename = 'test'
 TS = create_TS(SIM_TIME, NUMBER_OF_TIMESTEPS)
+
 ts1_x = []
 ts1_y = []
 
@@ -142,9 +215,9 @@ done = False
 for i in range(NUMBER_OF_TIMESTEPS):
     v_desired = compute_desired_velocity(robot_state, goal, ROBOT_RADIUS, VMAX)
     control_vel = compute_velocity(robot_state, TS[:, i, :], v_desired)
+    #print(TS[:, i, :])
     robot_state = update_state(robot_state, control_vel)
     robot_state_history[:4, i] = robot_state
-    print(control_vel[0])
     if control_vel[0] == 0:
         done = True
 
@@ -154,6 +227,3 @@ if done == True:
 
 plot_ship_and_obstacles(
     robot_state_history, TS, ROBOT_RADIUS, NUMBER_OF_TIMESTEPS, SIM_TIME, filename,start[0],start[1],goal[0],goal[1])
-
-print('The x values are : ',Osx_list)
-print('The x values are : ',Osy_list)
