@@ -1,39 +1,31 @@
 import numpy as np
 import math
 
-def input_TS():
-    pos3 = [1400, 2500]
-    v_ts3 = 130
-    ang3 = 180
-    ts3_data = (pos3,v_ts3,ang3)
-
-    return ts3_data
 
 
 def create_TS(sim_time, num_timesteps):
-    # TS 1
-    # v = -80
-    # p0 = np.array([1500, 1200])
-    # ang1 = 0
-    # rad = 20
-    # obst = create_ship(p0, v, math.radians(ang1), sim_time,
-    #                     num_timesteps).reshape(4, num_timesteps, 1)  # split the matrix into 4 - x values, y values , velocity and angle
-    #obstacles = obst
+    #TS 1
+    v = 220
+    p0 = np.array([-3451, 1000])
+    ang1 = 20
+    sn = 1
+    obst = create_ship(p0, v, math.radians(ang1), sim_time,
+                        num_timesteps).reshape(4, num_timesteps, 1)  # split the matrix into 4 - x values, y values , velocity and angle
+    obstacles = obst
     # #TS 2
-    # v = -120
+    # v = 120
     # p0 = np.array([1250, 1000])
     # ang2 = 0
+    # sn = 2
     # obst2 = create_ship(p0, v, math.radians(ang2), sim_time, num_timesteps).reshape(
     #     4, num_timesteps, 1)
     # obstacles = np.dstack((obstacles, obst2))
-    # TS 3
-    v = input_TS()[1]
-    p0 = np.array(input_TS()[0])
-    ang3 = input_TS()[2]
-    obst = create_ship(p0, v, math.radians(ang3), sim_time, num_timesteps).reshape(4,
-                                                                        num_timesteps, 1)
-    obstacles = obst
-    obstacles = np.dstack((obstacles, obst))
+    # #TS 3
+    # v = 130
+    # p0 = np.array([-1400,2500])
+    # ang3 = 30
+    # obst = create_ship(p0, v, math.radians(ang3), sim_time, num_timesteps).reshape(4,num_timesteps, 1)
+    # obstacles = np.dstack((obstacles, obst))
     # # TS 4
     # v = 150
     # p0 = np.array([2250, 3500])
@@ -78,15 +70,15 @@ def create_TS(sim_time, num_timesteps):
     #
     #
     # # TS 9
-    # v = -150
+    # v = 150
     # p0 = np.array([-1050, 1600])
-    # ang9 = 140
+    # ang9 = 340
     # obst = create_ship(p0, v, math.radians(ang9), sim_time, num_timesteps).reshape(4,
     #                                                                                 num_timesteps, 1)
     # obstacles = np.dstack((obstacles, obst))
-    # #
+    #
 
-    return obstacles
+    return obstacles,sn
 
 
 def create_ship(p0, v, theta, sim_time, num_timesteps):

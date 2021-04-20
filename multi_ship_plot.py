@@ -35,18 +35,22 @@ def plot_ship_and_obstacles(ship, obstacles, robot_radius, num_steps, sim_time, 
             color='Black', fontsize=15)
 
 
+
     # fig = plt.figure()
     # ax = fig.add_subplot(111, autoscale_on=False, xlim=(-120, 120), ylim=(0, 120))
     # ax.set_aspect('equal')
     # ax.grid()
-    line, = ax.plot([], [], '--b')
+    line, = ax.plot([], [], '-')
+
+
+
 
 
     robot_patch = Circle((ship[0, 0], ship[1, 0]), robot_radius, facecolor='white', edgecolor='black')
     obstacle_list = []
     for obstacle in range(np.shape(obstacles)[2]):
         obstacle = Circle((0, 0), robot_radius,
-                          alpha=0.4, facecolor='red',edgecolor='black')
+                          alpha=0.4)
         obstacle_list.append(obstacle)
 
     def init():
@@ -63,6 +67,8 @@ def plot_ship_and_obstacles(ship, obstacles, robot_radius, num_steps, sim_time, 
         line.set_data(ship[0, :i], ship[1, :i])
 
         return [robot_patch] + [line] + obstacle_list
+
+
 
 
 
