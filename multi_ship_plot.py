@@ -14,12 +14,17 @@ def plot_ship_and_obstacles(ship, obstacles, robot_radius, num_steps, sim_time, 
 
     fig, ax = plt.subplots()
 
-    fig.set_size_inches(15, 10)
+    fig.set_size_inches(11.25, 7.5)
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
 
-    ax.imshow(img, extent=[-4122, 6028, -400, 4675], alpha=1.96)
-    plt.xlim([-4122, 6028])
+    # ax.imshow(img, extent=[-4122, 6028, -400, 4675], alpha=1.96)
+    # plt.xlim([-4122, 6028])
+    # plt.ylim([-400, 4675])
+
+    ax.imshow(img, extent=[3122, 2028, -400, 4675], alpha=1.96)
+    plt.xlim([-3122, 2028])
     plt.ylim([-400, 4675])
+
     plt.xlabel('East (m)')
     plt.ylabel('North (m)')
     plt.grid(alpha=0.2)
@@ -29,12 +34,27 @@ def plot_ship_and_obstacles(ship, obstacles, robot_radius, num_steps, sim_time, 
     ax.text(str1, str2, 'Start Point',color='Black', fontsize=10)
     ax.text((gol1+110), gol2, 'Destination', color='Black', fontsize=10)
 
-    ax.text(0.95, 0.01, 'Test 4.2 ~ Sai ',
+
+
+    # ax.text(0.95, 0.01, 'CRI infused CA system ',
+    #         verticalalignment='bottom', horizontalalignment='right',
+    #         transform=ax.transAxes,
+    #         color='Black', fontsize=8)
+    ax.text(0.95, 0.01, 'CRI infused CA system ',
             verticalalignment='bottom', horizontalalignment='right',
             transform=ax.transAxes,
-            color='Black', fontsize=15)
+            color='Black', fontsize=8)
 
 
+    ax.text(0.95, 0.95, 'CRI cut off : 0.8',
+            horizontalalignment='right',
+            verticalalignment='top',
+            transform=ax.transAxes,color='Black', fontsize=8)
+
+    ax.text(0.22, 0.95, 'COLREGS : OFF',
+            horizontalalignment='right',
+            verticalalignment='top',
+            transform=ax.transAxes,color='Black', fontsize=8)
 
     # fig = plt.figure()
     # ax = fig.add_subplot(111, autoscale_on=False, xlim=(-120, 120), ylim=(0, 120))

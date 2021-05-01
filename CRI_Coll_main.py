@@ -11,7 +11,7 @@ import CRI_FunExe
 import matplotlib.pyplot as plt
 
 
-SIM_TIME = 26
+SIM_TIME = 21.65
 TIMESTEP = 0.1
 NUMBER_OF_TIMESTEPS = int(SIM_TIME/TIMESTEP)
 print('Number of Time Steps : ',NUMBER_OF_TIMESTEPS)
@@ -24,7 +24,7 @@ goal = np.array([5, 4000, 0, 0])
 
 
 
-def compute_velocity(ship, obstacles, v_desired,STN):
+def compute_velocity(ship, obstacles, v_desired):
     pA = ship[:2] # own ship position  x and y
     xposOwn = pA[0] * 0.000539957# x pos of ownship
     yposOwn = pA[1] * 0.000539957# y pos of ownship
@@ -95,11 +95,13 @@ def compute_velocity(ship, obstacles, v_desired,STN):
 
         cri = cri_index[1]
         dcpa = cri_index[0]
+        tcpa = cri_index[2]
         dbtn = cri_index[8]
         #print('The CRI index is : ',cri)
-        print(cri)
+        #print(cri)
         #print(dcpa)
-       #print(round(dbtn,3))
+        #print(tcpa)
+        #print(round(dbtn,3))
 
 
 
@@ -126,16 +128,16 @@ def compute_velocity(ship, obstacles, v_desired,STN):
             col_angP = col_ang - 360
         else: col_angP = col_ang
 
-        if cri > 0.6:
-            print('Collision Avodiance is ON')
-
+        if cri > 0.8:
+            #print('Collision Avoidance is ACTIVE')
+            #print('ACTIVE')
             if col_angP <=67.5 and col_angP>5:
                 #appoch()
-                #print('A')
+                print('A')
                 #print('Own Ship Lies in the COLREG region A')
-                if 2.25 * ROBOT_RADIUS > distBA:
-                    distBA = 2.25 * ROBOT_RADIUS
-                phi_obst = np.arcsin(2.25 * ROBOT_RADIUS / distBA)
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
                 # print(math.degrees(phi_obst))
                 phi_left = (thetaBA + phi_obst)
                 phi_right = (thetaBA - phi_obst)
@@ -143,40 +145,40 @@ def compute_velocity(ship, obstacles, v_desired,STN):
 
             elif col_angP <=112.5 and col_angP>67.5:
                 #print('Own Ship Lies in the COLREG region B')
-                #print('B')
-                if 2.25 * ROBOT_RADIUS > distBA:
-                    distBA = 2.25 * ROBOT_RADIUS
-                phi_obst = np.arcsin(2.25 * ROBOT_RADIUS / distBA)
+                print('B')
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
                 # print(math.degrees(phi_obst))
                 phi_left = (thetaBA + phi_obst)
                 phi_right =(thetaBA - phi_obst)
 
             elif col_angP <=210.0 and col_angP>112.5:
-                #print('C')
+                print('C')
                 #print('Own Ship Lies in the COLREG region C')
-                if 2.25* ROBOT_RADIUS > distBA:
-                    distBA = 2.25 * ROBOT_RADIUS
-                phi_obst = np.arcsin(2.25 * ROBOT_RADIUS / distBA)
+                if 2.5* ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
                 # print(math.degrees(phi_obst))
                 phi_left = thetaBA + phi_obst
                 phi_right = thetaBA - phi_obst
 
             elif col_angP <=247.5 and col_angP>210.0:
-                #print('D')
+                print('D')
                 #print('Own Ship Lies in the COLREG region D')
-                if 2.25 * ROBOT_RADIUS > distBA:
-                    distBA = 2.25 * ROBOT_RADIUS
-                phi_obst = np.arcsin(2.25 * ROBOT_RADIUS / distBA)
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
                 # print(math.degrees(phi_obst))
                 phi_left = thetaBA + phi_obst
                 phi_right = thetaBA - phi_obst
 
             elif col_angP <=355 and col_angP>247.5:
-                #print('E')
+                print('E')
                 #print('Own Ship Lies in the COLREG region E')
-                if 2.25 * ROBOT_RADIUS > distBA:
-                    distBA = 2.25 * ROBOT_RADIUS
-                phi_obst = np.arcsin(2.25 * ROBOT_RADIUS / distBA)
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
                 # print(math.degrees(phi_obst))
                 phi_left = thetaBA + phi_obst
                 phi_right = thetaBA - phi_obst
@@ -184,15 +186,15 @@ def compute_velocity(ship, obstacles, v_desired,STN):
 
             else :
                 #print('Own Ship Lies in the COLREG region F')
-                #print('F')
-                if 2.25 * ROBOT_RADIUS > distBA:
-                    distBA = 2.25 * ROBOT_RADIUS
-                phi_obst = np.arcsin(2.25 * ROBOT_RADIUS / distBA)
+                print('F')
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
                 # print(math.degrees(phi_obst))
                 phi_left = thetaBA + phi_obst
                 phi_right = thetaBA - phi_obst
         else:
-            print('Collision Avodiance is OFF')
+            #print('NON-ACTIVE')
             if 1 * ROBOT_RADIUS > distBA:
                 distBA = 1 * ROBOT_RADIUS
             phi_obst = np.arcsin(1 * ROBOT_RADIUS / distBA)
@@ -201,49 +203,46 @@ def compute_velocity(ship, obstacles, v_desired,STN):
             phi_right = (thetaBA - phi_obst)
         #print('=================================================')
 
-
         # VO
         translation = vB
         Atemp, btemp = create_constraints(translation, phi_left, "left")
-        Amat[i*2, :] = Atemp
-        bvec[i*2] = btemp
+        Amat[i * 2, :] = Atemp
+        bvec[i * 2] = btemp
         Atemp, btemp = create_constraints(translation, phi_right, "right")
-        Amat[i*2 + 1, :] = Atemp
-        bvec[i*2 + 1] = btemp
+        Amat[i * 2 + 1, :] = Atemp
+        bvec[i * 2 + 1] = btemp
 
-    # Create search-space
-    th = np.linspace(0, 2*np.pi, 20)
-    vel = np.linspace(0, VMAX, 5)
+        # Create search-space
+        th = np.linspace(0, 2 * np.pi, 20)
+        vel = np.linspace(0, VMAX, 5)
 
-    vv, thth = np.meshgrid(vel, th)
+        vv, thth = np.meshgrid(vel, th)
 
-    vx_sample = (vv * np.cos(thth)).flatten()
-    vy_sample = (vv * np.sin(thth)).flatten()
+        vx_sample = (vv * np.cos(thth)).flatten()
+        vy_sample = (vv * np.sin(thth)).flatten()
 
-    v_sample = np.stack((vx_sample, vy_sample))
+        v_sample = np.stack((vx_sample, vy_sample))
 
-    v_satisfying_constraints = check_constraints(v_sample, Amat, bvec)
+        v_satisfying_constraints = check_constraints(v_sample, Amat, bvec)
 
-    # Objective function
-    size = np.shape(v_satisfying_constraints)[1]
-    diffs = v_satisfying_constraints - \
-        ((v_desired).reshape(2, 1) @ np.ones(size).reshape(1, size))
-    norm = np.linalg.norm(diffs, axis=0)
-    min_index = np.where(norm == np.amin(norm))[0][0]
-    cmd_vel = (v_satisfying_constraints[:, min_index])
-    vp = math.sqrt((cmd_vel[0])**2 + (cmd_vel[1])**2)
-    #print(vp)
-    return cmd_vel
-
+        # Objective function
+        size = np.shape(v_satisfying_constraints)[1]
+        diffs = v_satisfying_constraints - \
+                ((v_desired).reshape(2, 1) @ np.ones(size).reshape(1, size))
+        norm = np.linalg.norm(diffs, axis=0)
+        min_index = np.where(norm == np.amin(norm))[0][0]
+        cmd_vel = (v_satisfying_constraints[:, min_index])
+        vp = math.sqrt((cmd_vel[0]) ** 2 + (cmd_vel[1]) ** 2)
+        # print(vp)
+        return cmd_vel
 
 def check_constraints(v_sample, Amat, bvec):
     length = np.shape(bvec)[0]
 
-    for i in range(int(length/2)):
-        v_sample = check_inside(v_sample, Amat[2*i:2*i+2, :], bvec[2*i:2*i+2])
+    for i in range(int(length / 2)):
+        v_sample = check_inside(v_sample, Amat[2 * i:2 * i + 2, :], bvec[2 * i:2 * i + 2])
 
     return v_sample
-
 
 def check_inside(v, Amat, bvec):
     v_out = []
@@ -251,7 +250,6 @@ def check_inside(v, Amat, bvec):
         if not ((Amat @ v[:, i] < bvec).all()):
             v_out.append(v[:, i])
     return np.array(v_out).T
-
 
 def create_constraints(translation, angle, side):
     # create line
@@ -268,7 +266,6 @@ def create_constraints(translation, angle, side):
 
     return A, b
 
-
 def translate_line(line, translation):
     matrix = np.eye(3)
     matrix[2, :2] = -translation[:2]
@@ -276,26 +273,22 @@ def translate_line(line, translation):
 
 Osx_list = []
 Osy_list = []
+
 def update_state(x, v):
     new_state = np.empty((4))
     new_state[:2] = x[:2] + v * TIMESTEP
     new_state[-2:] = v
-    Osx_list.append(round(x[0],2))
+    Osx_list.append(round(x[0], 2))
     Osy_list.append(round(x[1], 2))
     return new_state
-
-
 
 filename = 'test'
 TSP = create_TS(SIM_TIME, NUMBER_OF_TIMESTEPS)
 TS = TSP[0]
-TSN= TSP[1]
-#print(TSN)
+TSN = TSP[1]
+# print(TSN)
 ts1_x = []
 ts1_y = []
-
-
-
 
 robot_state = start
 robot_state_history = np.empty((4, NUMBER_OF_TIMESTEPS))
@@ -303,15 +296,15 @@ robot_state_history = np.empty((4, NUMBER_OF_TIMESTEPS))
 done = False
 for i in range(NUMBER_OF_TIMESTEPS):
     v_desired = compute_desired_velocity(robot_state, goal, ROBOT_RADIUS, VMAX)
-    control_vel = compute_velocity(robot_state, TS[:, i, :], v_desired,TSN)
+    control_vel = compute_velocity(robot_state, TS[:, i, :], v_desired, TSN)
     robot_state = update_state(robot_state, control_vel)
     robot_state_history[:4, i] = robot_state
     if control_vel[0] == 0:
         done = True
 
-
 if done == True:
     print('Goal')
 
 plot_ship_and_obstacles(
-    robot_state_history, TS, ROBOT_RADIUS, NUMBER_OF_TIMESTEPS, SIM_TIME, filename,start[0],start[1],goal[0],goal[1])
+    robot_state_history, TS, ROBOT_RADIUS, NUMBER_OF_TIMESTEPS, SIM_TIME, filename, start[0], start[1], goal[0],
+    goal[1])

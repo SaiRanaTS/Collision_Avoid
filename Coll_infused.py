@@ -11,13 +11,13 @@ import CRI_FunExe
 import matplotlib.pyplot as plt
 
 
-SIM_TIME = 25.5
+SIM_TIME = 23.65
 TIMESTEP = 0.1
 NUMBER_OF_TIMESTEPS = int(SIM_TIME/TIMESTEP)
 print('Number of Time Steps : ',NUMBER_OF_TIMESTEPS)
 ROBOT_RADIUS = 100
 VMAX = 190
-VMIN = 100
+VMIN = 10
 
 start = np.array([0, 0, 0, 0])
 goal = np.array([5, 4000, 0, 0])
@@ -128,77 +128,80 @@ def compute_velocity(ship, obstacles, v_desired,STN):
             col_angP = col_ang - 360
         else: col_angP = col_ang
 
+        if cri > 0.7:
+            # print('Collision Avoidance is ACTIVE')
+            # print('ACTIVE')
+            if col_angP <= 67.5 and col_angP > 5:
+                # appoch()
+                print('A')
+                # print('Own Ship Lies in the COLREG region A')
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
+                # print(math.degrees(phi_obst))
+                phi_left = (thetaBA + phi_obst)
+                phi_right = (thetaBA - phi_obst)
 
-        if col_angP <=67.5 and col_angP>5:
-            #appoch()
-            print('A')
-            print('We are the give way ship: Action will be taken')
-            #print('Own Ship Lies in the COLREG region A')
-            if 2.5 * ROBOT_RADIUS > distBA:
-                distBA = 2.5 * ROBOT_RADIUS
-            phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
+
+            elif col_angP <= 112.5 and col_angP > 67.5:
+                # print('Own Ship Lies in the COLREG region B')
+                print('B')
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
+                # print(math.degrees(phi_obst))
+                phi_left = (thetaBA + phi_obst)
+                phi_right = (thetaBA - phi_obst)
+
+            elif col_angP <= 210.0 and col_angP > 112.5:
+                print('C')
+                # print('Own Ship Lies in the COLREG region C')
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
+                # print(math.degrees(phi_obst))
+                phi_left = thetaBA + phi_obst
+                phi_right = thetaBA - phi_obst
+
+            elif col_angP <= 247.5 and col_angP > 210.0:
+                print('D')
+                # print('Own Ship Lies in the COLREG region D')
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
+                # print(math.degrees(phi_obst))
+                phi_left = thetaBA + phi_obst
+                phi_right = thetaBA - phi_obst
+
+            elif col_angP <= 355 and col_angP > 247.5:
+                print('E')
+                # print('Own Ship Lies in the COLREG region E')
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
+                # print(math.degrees(phi_obst))
+                phi_left = thetaBA + phi_obst
+                phi_right = thetaBA - phi_obst
+
+
+            else:
+                # print('Own Ship Lies in the COLREG region F')
+                print('F')
+                if 2.5 * ROBOT_RADIUS > distBA:
+                    distBA = 2.5 * ROBOT_RADIUS
+                phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
+                # print(math.degrees(phi_obst))
+                phi_left = thetaBA + phi_obst
+                phi_right = thetaBA - phi_obst
+        else:
+            # print('NON-ACTIVE')
+            if 1 * ROBOT_RADIUS > distBA:
+                distBA = 1 * ROBOT_RADIUS
+            phi_obst = np.arcsin(1 * ROBOT_RADIUS / distBA)
             # print(math.degrees(phi_obst))
             phi_left = (thetaBA + phi_obst)
             phi_right = (thetaBA - phi_obst)
-
-
-        elif col_angP <=112.5 and col_angP>67.5:
-            #print('Own Ship Lies in the COLREG region B')
-            print('B')
-            print('We are the give way ship: Action will be taken')
-            if 2.5 * ROBOT_RADIUS > distBA:
-                distBA = 2.5 * ROBOT_RADIUS
-            phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
-            # print(math.degrees(phi_obst))
-            phi_left = (thetaBA + phi_obst)
-            phi_right =(thetaBA - phi_obst)
-
-        elif col_angP <=210.0 and col_angP>112.5:
-            print('C')
-            print('Ship Passed: Encounter Over')
-            #print('Own Ship Lies in the COLREG region C')
-            if 0.1* ROBOT_RADIUS > distBA:
-                distBA = 2.5 * ROBOT_RADIUS
-            phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
-            # print(math.degrees(phi_obst))
-            phi_left = thetaBA + phi_obst
-            phi_right = thetaBA - phi_obst
-
-        elif col_angP <=247.5 and col_angP>210.0:
-            print('D')
-            print('We are Stand on ship: No Action Taken')
-            #print('Own Ship Lies in the COLREG region D')
-            if 0.1* ROBOT_RADIUS > distBA:
-                distBA = 2.5 * ROBOT_RADIUS
-            phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
-            # print(math.degrees(phi_obst))
-            phi_left = thetaBA + phi_obst
-            phi_right = thetaBA - phi_obst
-
-        elif col_angP <=355 and col_angP>247.5:
-            print('E')
-            print('We are Stand on ship: No Action Taken')
-            #print('Own Ship Lies in the COLREG region E')
-            if 0.1 * ROBOT_RADIUS > distBA:
-                distBA = 2.5 * ROBOT_RADIUS
-            phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
-            # print(math.degrees(phi_obst))
-            phi_left = thetaBA + phi_obst
-            phi_right = thetaBA - phi_obst
-
-
-        else :
-            #print('Own Ship Lies in the COLREG region F')
-            print('F')
-            print('Head Own : No Action Taken')
-            if 2.5 * ROBOT_RADIUS > distBA:
-                distBA = 2.5 * ROBOT_RADIUS
-            phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
-            # print(math.degrees(phi_obst))
-            phi_left = thetaBA + phi_obst
-            phi_right = thetaBA - phi_obst
-
-        #print('=================================================')
+        # print('=================================================')
 
 
         # VO
