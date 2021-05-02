@@ -115,19 +115,15 @@ def compute_velocity(ship, obstacles, v_desired,STN):
         #COLREG Implementation
         #print(math.degrees(thetaBA))
 
-        gotang = math.degrees(thetaBA)
+        gotang = - (math.degrees(thetaBA))
+
         if gotang < 0:
             ang2own = 360 + (gotang)
         else:
             ang2own = gotang
+        print(ang2own)
 
-        covrt_ang = ang2own
-        col_ang = 360 - covrt_ang + ango
-
-        if col_ang > 360:
-            col_angP = col_ang - 360
-        else: col_angP = col_ang
-
+        col_angP = ang2own
 
         if col_angP <=67.5 and col_angP>5:
             #appoch()
@@ -158,8 +154,8 @@ def compute_velocity(ship, obstacles, v_desired,STN):
             print('Ship Passed: Encounter Over')
             #print('Own Ship Lies in the COLREG region C')
             if 0.1* ROBOT_RADIUS > distBA:
-                distBA = 0.5 * ROBOT_RADIUS
-            phi_obst = np.arcsin(0.5 * ROBOT_RADIUS / distBA)
+                distBA = 0.1 * ROBOT_RADIUS
+            phi_obst = np.arcsin(0.1 * ROBOT_RADIUS / distBA)
             # print(math.degrees(phi_obst))
             phi_left = thetaBA + phi_obst
             phi_right = thetaBA - phi_obst
@@ -169,8 +165,8 @@ def compute_velocity(ship, obstacles, v_desired,STN):
             print('We are Stand on ship: No Action Taken')
             #print('Own Ship Lies in the COLREG region D')
             if 0.1* ROBOT_RADIUS > distBA:
-                distBA = 0.5 * ROBOT_RADIUS
-            phi_obst = np.arcsin(0.5 * ROBOT_RADIUS / distBA)
+                distBA = 0.1 * ROBOT_RADIUS
+            phi_obst = np.arcsin(0.1 * ROBOT_RADIUS / distBA)
             # print(math.degrees(phi_obst))
             phi_left = thetaBA + phi_obst
             phi_right = thetaBA - phi_obst
@@ -180,8 +176,8 @@ def compute_velocity(ship, obstacles, v_desired,STN):
             print('We are Stand on ship: No Action Taken')
             #print('Own Ship Lies in the COLREG region E')
             if 0.1 * ROBOT_RADIUS > distBA:
-                distBA = 0.5 * ROBOT_RADIUS
-            phi_obst = np.arcsin(0.5 * ROBOT_RADIUS / distBA)
+                distBA = 0.1 * ROBOT_RADIUS
+            phi_obst = np.arcsin(0.1 * ROBOT_RADIUS / distBA)
             # print(math.degrees(phi_obst))
             phi_left = thetaBA + phi_obst
             phi_right = thetaBA - phi_obst
@@ -191,12 +187,13 @@ def compute_velocity(ship, obstacles, v_desired,STN):
             #print('Own Ship Lies in the COLREG region F')
             print('F')
             print('Head Own : No Action Taken')
-            if 2.5 * ROBOT_RADIUS > distBA:
-                distBA = 2.5 * ROBOT_RADIUS
-            phi_obst = np.arcsin(2.5 * ROBOT_RADIUS / distBA)
+            if 0.1 * ROBOT_RADIUS > distBA:
+                distBA = 0.1 * ROBOT_RADIUS
+            phi_obst = np.arcsin(0.1 * ROBOT_RADIUS / distBA)
             # print(math.degrees(phi_obst))
             phi_left = thetaBA + phi_obst
             phi_right = thetaBA - phi_obst
+
 
         #print('=================================================')
 

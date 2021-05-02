@@ -51,11 +51,7 @@ def plot_ship_and_obstacles(ship, obstacles, robot_radius, num_steps, sim_time, 
             verticalalignment='top',
             transform=ax.transAxes,color='Black', fontsize=8)
 
-    ax.text(0.22, 0.95, 'COLREGS : ON',
-            horizontalalignment='right',
-            verticalalignment='top',
-            transform=ax.transAxes,color='Black', fontsize=8)
-    ax.text(0.35, 0.03, 'Cooperative Action Zone (CAZ) : Active',
+    ax.text(0.22, 0.95, 'COLREGS : OFF',
             horizontalalignment='right',
             verticalalignment='top',
             transform=ax.transAxes,color='Black', fontsize=8)
@@ -68,10 +64,10 @@ def plot_ship_and_obstacles(ship, obstacles, robot_radius, num_steps, sim_time, 
     line2, = ax.plot([], [], '-')
 
 
-    robot_patch2 = Circle((ship[0, 0], ship[1, 0]), 500, facecolor='white', edgecolor='black', alpha=0.5,
-                         linestyle='dashed')
-    robot_patch = Circle((ship[0, 0], ship[1, 0]), robot_radius, facecolor='white', edgecolor='black')
 
+
+
+    robot_patch = Circle((ship[0, 0], ship[1, 0]), robot_radius, facecolor='white', edgecolor='black')
     obstacle_list = []
     for obstacle in range(np.shape(obstacles)[2]):
         obstacle = Circle((0, 0), robot_radius,
@@ -80,24 +76,21 @@ def plot_ship_and_obstacles(ship, obstacles, robot_radius, num_steps, sim_time, 
 
     def init():
         ax.add_patch(robot_patch)
-        ax.add_patch(robot_patch2)
         for obstacle in obstacle_list:
             ax.add_patch(obstacle)
             line2.set_data([], [])
         line.set_data([], [])
-        return [robot_patch] + [line] + obstacle_list + [line2] + [robot_patch2]
-
-
+        return [robot_patch] + [line] + obstacle_list + [line2]
 
     def animate(i):
         robot_patch.center = (ship[0, i], ship[1, i])
-        robot_patch2.center = (ship[0, i], ship[1, i])
         for j in range(len(obstacle_list)):
             obstacle_list[j].center = (obstacles[0, i, j], obstacles[1, i, j])
-            line2.set_data(obstacles[0, :i, j], obstacles[1, :i, j])
+            line2.set_data(obstacles[:i, :j], obstacles[:i, :j])
         line.set_data(ship[0, :i], ship[1, :i])
 
-        return [robot_patch] + [line] + obstacle_list + [line2] + [robot_patch2]
+
+        return [robot_patch] + [line] + obstacle_list + [line2]
 
 
 

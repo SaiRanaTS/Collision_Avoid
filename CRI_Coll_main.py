@@ -203,38 +203,38 @@ def compute_velocity(ship, obstacles, v_desired):
             phi_right = (thetaBA - phi_obst)
         #print('=================================================')
 
-        # VO
-        translation = vB
-        Atemp, btemp = create_constraints(translation, phi_left, "left")
-        Amat[i * 2, :] = Atemp
-        bvec[i * 2] = btemp
-        Atemp, btemp = create_constraints(translation, phi_right, "right")
-        Amat[i * 2 + 1, :] = Atemp
-        bvec[i * 2 + 1] = btemp
+    # VO
+    translation = vB
+    Atemp, btemp = create_constraints(translation, phi_left, "left")
+    Amat[i * 2, :] = Atemp
+    bvec[i * 2] = btemp
+    Atemp, btemp = create_constraints(translation, phi_right, "right")
+    Amat[i * 2 + 1, :] = Atemp
+    bvec[i * 2 + 1] = btemp
 
-        # Create search-space
-        th = np.linspace(0, 2 * np.pi, 20)
-        vel = np.linspace(0, VMAX, 5)
+    # Create search-space
+    th = np.linspace(0, 2 * np.pi, 20)
+    vel = np.linspace(0, VMAX, 5)
 
-        vv, thth = np.meshgrid(vel, th)
+    vv, thth = np.meshgrid(vel, th)
 
-        vx_sample = (vv * np.cos(thth)).flatten()
-        vy_sample = (vv * np.sin(thth)).flatten()
+    vx_sample = (vv * np.cos(thth)).flatten()
+    vy_sample = (vv * np.sin(thth)).flatten()
 
-        v_sample = np.stack((vx_sample, vy_sample))
+    v_sample = np.stack((vx_sample, vy_sample))
 
-        v_satisfying_constraints = check_constraints(v_sample, Amat, bvec)
+    v_satisfying_constraints = check_constraints(v_sample, Amat, bvec)
 
-        # Objective function
-        size = np.shape(v_satisfying_constraints)[1]
-        diffs = v_satisfying_constraints - \
-                ((v_desired).reshape(2, 1) @ np.ones(size).reshape(1, size))
-        norm = np.linalg.norm(diffs, axis=0)
-        min_index = np.where(norm == np.amin(norm))[0][0]
-        cmd_vel = (v_satisfying_constraints[:, min_index])
-        vp = math.sqrt((cmd_vel[0]) ** 2 + (cmd_vel[1]) ** 2)
-        # print(vp)
-        return cmd_vel
+    # Objective function
+    size = np.shape(v_satisfying_constraints)[1]
+    diffs = v_satisfying_constraints - \
+            ((v_desired).reshape(2, 1) @ np.ones(size).reshape(1, size))
+    norm = np.linalg.norm(diffs, axis=0)
+    min_index = np.where(norm == np.amin(norm))[0][0]
+    cmd_vel = (v_satisfying_constraints[:, min_index])
+    vp = math.sqrt((cmd_vel[0]) ** 2 + (cmd_vel[1]) ** 2)
+    # print(vp)
+    return cmd_vel
 
 def check_constraints(v_sample, Amat, bvec):
     length = np.shape(bvec)[0]
